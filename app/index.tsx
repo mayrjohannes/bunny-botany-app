@@ -92,167 +92,180 @@ export default function HomeScreen() {
   };
 
   return (
-    <View style={{ flex: 1, padding: 20, backgroundColor: "#f2f2f2" }}>
-      
+    <View style={{ flex: 1, backgroundColor: "#f6f7fb" }}>
+  
       {/* HEADER */}
-      <Text style={{ fontSize: 28, fontWeight: "bold", marginBottom: 20 }}>
-        🌿 BunnyBotany
-      </Text>
+      <View style={{ padding: 20, paddingTop: 60 }}>
+        <Text style={{ fontSize: 30, fontWeight: "bold" }}>
+          🐰 BunnyBotany
+        </Text>
+        <Text style={{ color: "#666", marginTop: 5 }}>
+          Pflanzen für dein Kaninchen prüfen
+        </Text>
+      </View>
   
-      <Button title="📸 Foto machen" onPress={takePhoto} />
+      {/* MAIN CONTENT */}
+      <View style={{ flex: 1, padding: 20 }}>
   
-      {/* IMAGE */}
-      {image && (
-        <Image
-          source={{ uri: image }}
+        {/* CAMERA BUTTON */}
+        <TouchableOpacity
+          onPress={takePhoto}
           style={{
-            width: "100%",
-            height: 250,
-            marginTop: 20,
-            borderRadius: 16
-          }}
-        />
-      )}
-  
-      {/* RESULT CARD */}
-      {result?.plantnet && (
-        <View
-          style={{
-            marginTop: 20,
-            padding: 16,
-            borderRadius: 16,
-            backgroundColor: "#ffffff",
+            backgroundColor: "#4CAF50",
+            padding: 20,
+            borderRadius: 20,
+            alignItems: "center",
+            justifyContent: "center",
             shadowColor: "#000",
-            shadowOpacity: 0.1,
+            shadowOpacity: 0.2,
             shadowRadius: 10,
-            elevation: 3
+            elevation: 5
           }}
         >
-          {/* 🌿 PLANT INFO */}
-          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-            🌿 {result.plantnet.species}
+          <Text style={{ fontSize: 18, color: "#fff", fontWeight: "bold" }}>
+            📸 Foto aufnehmen
           </Text>
+        </TouchableOpacity>
   
-          <Text style={{ color: "#666", marginBottom: 10 }}>
-            Gattung: {result.plantnet.genus}
-          </Text>
+        {/* IMAGE PREVIEW */}
+        {image && (
+          <Image
+            source={{ uri: image }}
+            style={{
+              width: "100%",
+              height: 220,
+              borderRadius: 20,
+              marginTop: 20
+            }}
+          />
+        )}
   
-          <Text style={{ marginBottom: 10 }}>
-            Treffer: {(result.plantnet.confidence * 100).toFixed(1)}%
-          </Text>
+        {/* RESULT CARD */}
+        {result?.plantnet && (
+          <View
+            style={{
+              marginTop: 20,
+              backgroundColor: "#fff",
+              borderRadius: 20,
+              padding: 20,
+              shadowColor: "#000",
+              shadowOpacity: 0.1,
+              shadowRadius: 10,
+              elevation: 3
+            }}
+          >
   
-          {/* ⚠️ UNSICHER */}
-          {result.plantnet.confidence < 0.2 && (
-            <Text style={{ color: "orange", marginBottom: 10 }}>
-              ⚠️ Unsichere Erkennung
+            {/* 🌿 NAME */}
+            <Text style={{ fontSize: 22, fontWeight: "bold" }}>
+              {result.plantnet.species}
             </Text>
-          )}
   
-          {/* 🚦 STATUS */}
-          {(() => {
-            const val = result.rabbitInfo?.rabbitSafe;
+            <Text style={{ color: "#777", marginBottom: 10 }}>
+              {result.plantnet.genus}
+            </Text>
   
-            if (val === true) {
-              return (
-                <Text style={{ fontSize: 18, color: "#2e7d32" }}>
-                  🟢 Essbar
-                </Text>
-              );
-            }
-  
-            if (val === false) {
-              return (
-                <Text style={{ fontSize: 18, color: "#c62828" }}>
-                  🔴 Nicht essbar
-                </Text>
-              );
-            }
-  
-            return (
-              <Text style={{ fontSize: 18, color: "#757575" }}>
-                ⚪ Keine Daten vorhanden
-              </Text>
-            );
-          })()}
-  
-          {/* ⚠️ KEINE DATEN BLOCK */}
-          {result.rabbitInfo?.matchType === "none" && (
+            {/* CONFIDENCE BAR */}
             <View
               style={{
-                marginTop: 10,
-                padding: 10,
+                height: 8,
+                backgroundColor: "#eee",
                 borderRadius: 10,
-                backgroundColor: "#eeeeee"
+                overflow: "hidden",
+                marginBottom: 10
               }}
             >
-              <Text style={{ color: "#555" }}>
-                ⚠️ Für diese Pflanze sind keine Kaninchen-Daten vorhanden.
-              </Text>
+              <View
+                style={{
+                  width: `${Math.min(
+                    result.plantnet.confidence * 100,
+                    100
+                  )}%`,
+                  height: "100%",
+                  backgroundColor: "#4CAF50"
+                }}
+              />
             </View>
-          )}
   
-          {/* 📊 DETAILS */}
-          <View style={{ marginTop: 15 }}>
-            
-            <Text>
-              Menge:{" "}
-              {result.rabbitInfo?.maxAmount ?? "Keine Daten"}
+            <Text style={{ fontSize: 12, color: "#777" }}>
+              {(result.plantnet.confidence * 100).toFixed(1)}% Erkennung
             </Text>
   
-            <Text>
-              Toxizität:{" "}
-              {result.rabbitInfo?.toxicityLevel ?? "Keine Daten"}
-            </Text>
+            {/* 🚦 STATUS */}
+            {(() => {
+              const val = result.rabbitInfo?.rabbitSafe;
   
-            <Text>
-              Giftig für Menschen:{" "}
-              {result.rabbitInfo?.toxicForHumans === null
-                ? "Keine Daten"
-                : result.rabbitInfo?.toxicForHumans
-                ? "Ja"
-                : "Nein"}
-            </Text>
+              let bg = "#eee";
+              let text = "⚪ Keine Daten";
+              let color = "#555";
   
-            <Text>
-              Datenqualität:{" "}
-              {result.rabbitInfo?.confidence ?? "Keine Daten"}
-            </Text>
+              if (val === true) {
+                bg = "#e8f5e9";
+                text = "🟢 Essbar";
+                color = "#2e7d32";
+              }
   
-          </View>
+              if (val === false) {
+                bg = "#ffebee";
+                text = "🔴 Nicht essbar";
+                color = "#c62828";
+              }
   
-          {/* 📝 NOTES */}
-          <View style={{ marginTop: 15 }}>
-            <Text style={{ fontWeight: "bold" }}>Notizen:</Text>
-            <Text>
-              {result.rabbitInfo?.notes ?? "Keine Daten"}
-            </Text>
-          </View>
+              return (
+                <View
+                  style={{
+                    marginTop: 15,
+                    padding: 12,
+                    borderRadius: 12,
+                    backgroundColor: bg
+                  }}
+                >
+                  <Text style={{ fontSize: 18, color }}>
+                    {text}
+                  </Text>
+                </View>
+              );
+            })()}
   
-          {/* 📚 SOURCES */}
-          <View style={{ marginTop: 15 }}>
-            <Text style={{ fontWeight: "bold" }}>Quellen:</Text>
-  
-            {result.rabbitInfo?.sources?.length > 0 ? (
-              result.rabbitInfo.sources.map((s, i) => (
-                <Text key={i}>• {s}</Text>
-              ))
-            ) : (
-              <Text style={{ color: "#777" }}>
-                Keine Quellen vorhanden
+            {/* ⚠️ NO DATA */}
+            {result.rabbitInfo?.matchType === "none" && (
+              <Text style={{ marginTop: 10, color: "#777" }}>
+                Keine Fütterungsinformationen vorhanden
               </Text>
             )}
+  
+            {/* DETAILS */}
+            <View style={{ marginTop: 15 }}>
+              <Text>🐰 Menge: {result.rabbitInfo?.maxAmount ?? "Keine Daten"}</Text>
+              <Text>☠️ Toxizität: {result.rabbitInfo?.toxicityLevel ?? "Keine Daten"}</Text>
+              <Text>
+                👤 Mensch:{" "}
+                {result.rabbitInfo?.toxicForHumans === null
+                  ? "Keine Daten"
+                  : result.rabbitInfo?.toxicForHumans
+                  ? "Giftig"
+                  : "Ungiftig"}
+              </Text>
+            </View>
+  
+            {/* NOTES */}
+            <View style={{ marginTop: 15 }}>
+              <Text style={{ fontWeight: "bold" }}>📝 Hinweise</Text>
+              <Text style={{ color: "#555" }}>
+                {result.rabbitInfo?.notes ?? "Keine Daten"}
+              </Text>
+            </View>
+  
           </View>
+        )}
   
-        </View>
-      )}
+        {/* ERROR */}
+        {result?.error && (
+          <Text style={{ color: "red", marginTop: 20 }}>
+            ❌ {result.error}
+          </Text>
+        )}
   
-      {/* ERROR */}
-      {result?.error && (
-        <Text style={{ color: "red", marginTop: 20 }}>
-          ❌ {result.error}
-        </Text>
-      )}
-  
+      </View>
     </View>
   );
 
