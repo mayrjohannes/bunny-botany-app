@@ -23,7 +23,7 @@
     ],
 
     "extra": {
-      "apiUrl": "https://bunnybotany.prevus.at:4000"
+      "apiUrl": "https://bunnybotany.prevus.at"
     }
   }
 }
