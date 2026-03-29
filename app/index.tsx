@@ -73,24 +73,78 @@ const upload = async (photo) => {
 
   return (
     <View style={{ padding: 20 }}>
-      <Button title="ðŸ“¸ Foto machen" onPress={takePhoto} />
-
+      <Text style={{ fontSize: 26, fontWeight: "bold", marginBottom: 20 }}>
+        🌿 BunnyBotany
+      </Text>
+  
+      <Button title="📸 Foto machen" onPress={takePhoto} />
+  
       {image && (
-        <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />
+        <Image
+          source={{ uri: image }}
+          style={{
+            width: "100%",
+            height: 250,
+            marginTop: 20,
+            borderRadius: 12
+          }}
+        />
       )}
-
+  
       {result?.plantnet && (
-        <View>
-          <Text>ðŸŒ¿ {result.plantnet.species}</Text>
-          <Text>ðŸ° Essbar: {String(result.rabbitInfo.rabbitSafe)}</Text>
+        <View
+          style={{
+            marginTop: 20,
+            padding: 15,
+            borderRadius: 12,
+            backgroundColor: "#f5f5f5"
+          }}
+        >
+          <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+            🌿 {result.plantnet.species}
+          </Text>
+  
+          <Text>Gattung: {result.plantnet.genus}</Text>
+          <Text>
+            Treffer: {(result.plantnet.confidence * 100).toFixed(1)}%
+          </Text>
+  
+          {/* 🚦 Ampel */}
+          <View style={{ marginTop: 10 }}>
+            <Text style={{ fontSize: 18 }}>
+              {result.rabbitInfo?.rabbitSafe ? "🟢 Essbar" : "🔴 Nicht essbar"}
+            </Text>
+          </View>
+  
+          <View style={{ marginTop: 10 }}>
+            <Text>Menge: {result.rabbitInfo?.maxAmount}</Text>
+            <Text>
+              Giftig für Menschen:{" "}
+              {result.rabbitInfo?.toxicForHumans ? "Ja" : "Nein"}
+            </Text>
+            <Text>Toxizität: {result.rabbitInfo?.toxicityLevel}</Text>
+            <Text>Confidence: {result.rabbitInfo?.confidence}</Text>
+          </View>
+  
+          <View style={{ marginTop: 10 }}>
+            <Text style={{ fontWeight: "bold" }}>Notizen:</Text>
+            <Text>{result.rabbitInfo?.notes}</Text>
+          </View>
+  
+          <View style={{ marginTop: 10 }}>
+            <Text style={{ fontWeight: "bold" }}>Quellen:</Text>
+            {result.rabbitInfo?.sources?.map((s, i) => (
+              <Text key={i}>• {s}</Text>
+            ))}
+          </View>
         </View>
       )}
+  
       {result?.error && (
-        <Text style={{ color: "red" }}>
-    â     Œ {result.error}
+        <Text style={{ color: "red", marginTop: 20 }}>
+          ❌ {result.error}
         </Text>
       )}
-
     </View>
   );
 }
