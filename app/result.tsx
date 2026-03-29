@@ -31,7 +31,7 @@ export default function ResultScreen() {
       } as any);
 
       const res = await fetch(
-        "https://bunnybotany.prevus.at:4000/identify",
+        "https://bunnybotany.prevus.at/identify",
         {
           method: "POST",
           body: formData
