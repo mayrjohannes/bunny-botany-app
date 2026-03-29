@@ -16,6 +16,8 @@ export default function ResultScreen() {
   const [loading, setLoading] = useState(true);
   const [result, setResult] = useState<any>(null);
 
+  const API_URL = Constants.expoConfig.extra.apiUrl;
+
   useEffect(() => {
     upload();
   }, []);
@@ -24,14 +26,28 @@ export default function ResultScreen() {
     try {
       const formData = new FormData();
 
-      formData.append("images", {
-        uri,
-        name: "photo.jpg",
-        type: "image/jpeg"
-      } as any);
+      if (photo.uri.startsWith("blob:")) {
+        console.log("Web detected");
+  
+        const response = await fetch(photo.uri);
+        const blob = await response.blob();
+  
+        console.log("Blob:", blob);
+  
+        formData.append("images", blob, "photo.jpg");
+      } else {
+        console.log("Mobile detected");
+  
+        formData.append("images", {
+          uri: photo.uri,
+          name: "photo.jpg",
+          type: "image/jpeg"
+        });
+      }
+      
+      formData.append("organs", "leaf");
 
-      const res = await fetch(
-        "https://bunnybotany.prevus.at/identify",
+      const res = await fetch(`${API_URL}/identify`,
         {
           method: "POST",
           body: formData
