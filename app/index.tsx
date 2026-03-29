@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, Button, Image } from "react-native";
+import { View, Text, Image, TouchableOpacity, ScrollView } from "react-native";
 import Constants from "expo-constants";
 import * as ImagePicker from "expo-image-picker";
 
