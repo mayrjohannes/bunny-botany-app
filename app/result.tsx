@@ -26,37 +26,35 @@ export default function ResultScreen() {
   const upload = async () => {
     try {
       const formData = new FormData();
-
-      if (photo.uri.startsWith("blob:")) {
-        console.log("Web detected");
   
-        const response = await fetch(photo.uri);
+      if ((uri as string).startsWith("blob:")) {
+        console.log("🌐 Web detected");
+  
+        const response = await fetch(uri as string);
         const blob = await response.blob();
   
         console.log("Blob:", blob);
   
         formData.append("images", blob, "photo.jpg");
       } else {
-        console.log("Mobile detected");
+        console.log("📱 Mobile detected");
   
         formData.append("images", {
-          uri: photo.uri,
+          uri: uri as string,
           name: "photo.jpg",
           type: "image/jpeg"
-        });
+        } as any);
       }
-      
+  
       formData.append("organs", "leaf");
-
-      const res = await fetch(`${API_URL}/identify`,
-        {
-          method: "POST",
-          body: formData
-        }
-      );
-
+  
+      const res = await fetch(`${API_URL}/identify`, {
+        method: "POST",
+        body: formData
+      });
+  
       const data = await res.json();
-
+  
       setResult(data);
     } catch (err) {
       console.error(err);
