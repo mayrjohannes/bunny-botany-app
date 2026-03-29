@@ -1,56 +1,29 @@
 {
   "expo": {
-    "name": "bunny-botany-app",
-    "slug": "bunny-botany-app",
+    "name": "BunnyBotany",
+    "slug": "bunny-botany",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "bunnybotanyapp",
-    "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "ios": {
-      "supportsTablet": true
-    },
+
+    "icon": "./assets/icon.png",
+
+    "userInterfaceStyle": "light",
+
     "android": {
+      "package": "com.elmajo.bunnybotany",
+      "versionCode": 1,
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
-      },
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false,
-      "package": "com.elmajo.bunnybotanyapp"
-    },
-    "web": {
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
-    "plugins": [
-      "expo-router",
-      [
-        "expo-splash-screen",
-        {
-          "image": "./assets/images/splash-icon.png",
-          "imageWidth": 200,
-          "resizeMode": "contain",
-          "backgroundColor": "#ffffff",
-          "dark": {
-            "backgroundColor": "#000000"
-          }
-        }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true,
-      "reactCompiler": true
-    },
-    "extra": {
-      "router": {},
-      "eas": {
-        "projectId": "2db0cda6-b1b3-4646-88c2-882196c5a597"
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#4CAF50"
       }
     },
-    "owner": "elmajo"
+
+    "plugins": [
+      "expo-image-picker"
+    ],
+
+    "extra": {
+      "apiUrl": "https://bunnybotany.prevus.at:4000"
+    }
   }
 }
