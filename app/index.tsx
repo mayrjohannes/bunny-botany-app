@@ -7,8 +7,9 @@ export default function HomeScreen() {
 
   const takePhoto = async () => {
     const res = await ImagePicker.launchCameraAsync({
-      mediaTypes: ImagePicker.MediaType.Images,
-      quality: 0.7
+      mediaTypes: ["images"],
+      quality: 0.7,
+      cameraType: ImagePicker.CameraType.back
     });
 
     if (!res.canceled) {
